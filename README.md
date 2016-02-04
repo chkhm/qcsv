@@ -36,14 +36,12 @@ the first row.
 No limitation is given regarding the statistics, which means the output file will include the complete 
 statistics set including:
 - Total
-- Median
 - Mean
 - standard deviation
 - Maximum
 - Index of maximum value
 - Minimum
 - Index of minimum value
-- confidence interval (alpha 0.05 as default)
 - Mean distance between rows for numeric and date/time rows
 - Standard Deviation of distance between rows
 - Most frequent string (for string columns)
@@ -70,10 +68,10 @@ If you want to compile the source code yourself please review the operating syst
 documents.The software is mainly developed under Linux and Mac OS. We do provide a makefile that compiles 
 QCSV under Ubuntu Linux with a simple: 
 make
-sudo make install
 
-For MacOS we provide an Xcode project file. For compiling uder Windows please refer to the separate 
-installation instructions for Windows.
+For MacOS we provide an Xcode project file. For compiling under Windows we offer a Visual Studio Project File.
+The Visual Studio File is not tested as often as the XCode project file and the makefile, so it might be slightly
+outdated. Please note that you also need an extra file from other open source projects (see below).
 
 
 Support
@@ -81,8 +79,7 @@ Support
 
 If you need help with QCSV or want to ask a question about QCSV, use the the mailing list. Please also check
 for answers to your problems on the FAQ page of QCSV. This is a non-commercial project so please be patient. We 
-will do our best to answer questions.  Support may also be available if you are purchasing a commercial license to use QCSV.
-
+will do our best to answer questions.  
 
 
 Contributing to QCSV
