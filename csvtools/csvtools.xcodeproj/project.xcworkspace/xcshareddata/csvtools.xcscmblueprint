@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "9302D35F3F4257ABD61E5BAE20CD1E309C813CC7",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "95912B680CE46B9A5BAAF33A404865D62C06B610" : 0,
+    "9302D35F3F4257ABD61E5BAE20CD1E309C813CC7" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "029FC149-4DB4-40C4-8C74-87BB35F01AD9",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "95912B680CE46B9A5BAAF33A404865D62C06B610" : "",
+    "9302D35F3F4257ABD61E5BAE20CD1E309C813CC7" : "csvtools"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "csvtools",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "csvtools.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "192.168.1.103:\/volume1\/REPO\/csvtools.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9302D35F3F4257ABD61E5BAE20CD1E309C813CC7"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/chkhm\/qcsv.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "95912B680CE46B9A5BAAF33A404865D62C06B610"
+    }
+  ]
+}

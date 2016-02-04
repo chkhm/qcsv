@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="csvtools" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/csvtools" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option parameters="../test1.csv" />
+				<Compiler>
+					<Add option="-std=c++11" />
+					<Add option="-g" />
+					<Add directory="include" />
+					<Add directory="csvtools" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/csvtools" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add directory="include" />
+					<Add directory="csvtools" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-std=c++11" />
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="csvtools/csv_analyzer.cpp" />
+		<Unit filename="csvtools/csv_analyzer.h" />
+		<Unit filename="csvtools/csv_basetypes.h" />
+		<Unit filename="csvtools/csv_command_line_parser.cpp" />
+		<Unit filename="csvtools/csv_command_line_parser.h" />
+		<Unit filename="csvtools/csv_expression.cpp" />
+		<Unit filename="csvtools/csv_expression.h" />
+		<Unit filename="csvtools/csv_filter.cpp" />
+		<Unit filename="csvtools/csv_filter.h" />
+		<Unit filename="csvtools/csv_formater.cpp" />
+		<Unit filename="csvtools/csv_formater.h" />
+		<Unit filename="csvtools/csv_qsum.cpp" />
+		<Unit filename="csvtools/csv_qsum.h" />
+		<Unit filename="csvtools/csv_selector.cpp" />
+		<Unit filename="csvtools/csv_selector.h" />
+		<Unit filename="csvtools/csv_smoother.cpp" />
+		<Unit filename="csvtools/csv_smoother.h" />
+		<Unit filename="csvtools/csv_statistics.cpp" />
+		<Unit filename="csvtools/csv_statistics.h" />
+		<Unit filename="csvtools/csv_tool.cpp" />
+		<Unit filename="csvtools/csv_tool.h" />
+		<Unit filename="csvtools/csv_value.cpp" />
+		<Unit filename="csvtools/csv_value.h" />
+		<Unit filename="csvtools/csvfilter.cpp" />
+		<Unit filename="csvtools/csvfilter.h" />
+		<Unit filename="csvtools/main.cpp" />
+		<Unit filename="csvtools/ringbuffer.h" />
+		<Unit filename="csvtools/statistics.cpp" />
+		<Unit filename="csvtools/statistics.h" />
+		<Unit filename="csvtools/stringutil.cpp" />
+		<Unit filename="csvtools/stringutil.h" />
+		<Unit filename="csvtools/strptime.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="csvtools/utility.cpp" />
+		<Unit filename="csvtools/utility.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

@@ -1,0 +1,155 @@
+# depslib dependency file v1.0
+1422800892 source:d:\xcode projects\csvtools\csvtools\csvtools\main.cpp
+	<iostream>
+	<iomanip>
+	<fstream>
+	"stringutil.h"
+	"csvfilter.h"
+	<regex>
+
+1422800892 .h"
+
+1422361082 d:\xcode projects\csvtools\csvtools\csvtools\stringutil.h
+	<inttypes.h>
+	<stdlib.h>
+	<stdio.h>
+	<string>
+	<vector>
+
+1422361082 
+
+1423152160 d:\xcode projects\csvtools\csvtools\csvtools\csvfilter.h
+	<iostream>
+	<sstream>
+	<stdio.h>
+	<vector>
+	<map>
+
+1422361082 source:d:\xcode projects\csvtools\csvtools\csvtools\stringutil.cpp
+	"stringutil.h"
+	<string.h>
+	<time.h>
+	<iostream>
+
+1422361082 source:d:\xcode projects\csvtools\csvtools\csvtools\strptime.c
+	<ctype.h>
+	<string.h>
+	<time.h>
+
+1424487224 source:/home/q/Xcode Projects/csvtools/csvtools/csvtools/main.cpp
+	<unistd.h>
+	<iostream>
+	<iomanip>
+	<fstream>
+	"stringutil.h"
+	"csvfilter.h"
+	<regex>
+
+1422361082 /home/q/Xcode Projects/csvtools/csvtools/csvtools/stringutil.h
+	<inttypes.h>
+	<stdlib.h>
+	<stdio.h>
+	<string>
+	<vector>
+
+1424325179 /home/q/Xcode Projects/csvtools/csvtools/csvtools/csvfilter.h
+	<string.h>
+	<iostream>
+	<sstream>
+	<stdio.h>
+	<vector>
+	<map>
+
+1422361082 source:/home/q/Xcode Projects/csvtools/csvtools/csvtools/stringutil.cpp
+	"stringutil.h"
+	<string.h>
+	<time.h>
+	<iostream>
+
+1422361082 source:/home/q/Xcode Projects/csvtools/csvtools/csvtools/strptime.c
+	<ctype.h>
+	<string.h>
+	<time.h>
+
+1424487167 source:/home/q/Xcode Projects/csvtools/csvtools/csvtools/csvfilter.cpp
+	"csvfilter.h"
+	<stddef.h>
+	<time.h>
+	<string.h>
+	<iostream>
+	<iomanip>
+	<fstream>
+	<string>
+	<sstream>
+	<vector>
+	<map>
+	<regex>
+	"stringutil.h"
+
+1424927237 source:/home/q/Xcode_Projects/csvtools/csvtools/csvtools/csvfilter.cpp
+	"csvfilter.h"
+	<stddef.h>
+	<time.h>
+	<string.h>
+	<iostream>
+	<iomanip>
+	<fstream>
+	<string>
+	<sstream>
+	<vector>
+	<map>
+	<regex>
+	"stringutil.h"
+
+1424781839 /home/q/Xcode_Projects/csvtools/csvtools/csvtools/csvfilter.h
+	<string.h>
+	<iostream>
+	<sstream>
+	<stdio.h>
+	<vector>
+	<map>
+	"statistics.h"
+
+1422361082 /home/q/Xcode_Projects/csvtools/csvtools/csvtools/stringutil.h
+	<inttypes.h>
+	<stdlib.h>
+	<stdio.h>
+	<string>
+	<vector>
+
+1424921589 source:/home/q/Xcode_Projects/csvtools/csvtools/csvtools/main.cpp
+	<unistd.h>
+	<iostream>
+	<iomanip>
+	<fstream>
+	"stringutil.h"
+	"csvfilter.h"
+	<regex>
+
+1422361082 source:/home/q/Xcode_Projects/csvtools/csvtools/csvtools/stringutil.cpp
+	"stringutil.h"
+	<string.h>
+	<time.h>
+	<iostream>
+
+1422361082 source:/home/q/Xcode_Projects/csvtools/csvtools/csvtools/strptime.c
+	<ctype.h>
+	<string.h>
+	<time.h>
+
+1424769994 /home/q/Xcode_Projects/csvtools/csvtools/csvtools/statistics.h
+	<string.h>
+	<limits>
+	<string>
+
+1424770405 source:/home/q/Xcode_Projects/csvtools/csvtools/csvtools/statistics.cpp
+	"statistics.h"
+	"utility.h"
+
+1424768046 /home/q/Xcode_Projects/csvtools/csvtools/csvtools/utility.h
+	<time.h>
+
+1424769404 source:/home/q/Xcode_Projects/csvtools/csvtools/csvtools/utility.cpp
+	<string.h>
+	"utility.h"
+

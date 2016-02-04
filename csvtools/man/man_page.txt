@@ -1,0 +1,330 @@
+.\" Manpage for qcsv.
+.\" Contact christoph.kuhmuench@gmail.com to correct errors or typos.
+.TH man 8 "20 June 2015" "0.55" "qcsv man page"
+.SH NAME
+qcsv \- manipulate CSV files and streams
+.SH SYNOPSIS
+qcsv [options] -- [inputfilename] [outputfilename]
+
+.SH DESCRIPTION
+
+qcsv is a tool for manipulating comma separated values (CSV) files or streams. It is able to detect
+columns, column types and the separator between the columns of the CSV file. It provide features to
+manipulate the file, e.g. to strip or add white spaces, strip or add quotes, reformat columns (e.g.
+change date and time representation), but most importantly to manipulate the data itself: Similar 
+to the SQL select command individual columns can be chosen (select a, b, c) and a where clause can 
+be applied that filters out individual rows. In addition qcsv can smooth the incoming data which 
+can be handy when you want to plot it. Smoothing means that the data is averaged over multiple 
+rows. qcsv can smooth integer, floating point and datetime data. For strings one string out of the 
+group of rows is chosen.
+.P
+qcsv operates stream-oriented and can work with input files of arbitrary length. The user can 
+manipulate how much data shall be kept in RAM. When no input and/ or output file is specified it 
+reads from standard input and writes to standard output.
+.P
+Assume that the input file test.csv has the following content:
+.P
+time,text,value1,value2
+.P
+10:02:29,Abcd,10,100.00
+.P
+10:02:30,Abce,11,101.01
+.P
+10:02:31,Abcf,9,99.99
+.P
+10:02:33,Abch,12,120.11
+.P
+10:03:34,Abci,8,79.89
+.P
+10:03:35,Abcj,9,200.513
+.P
+10:03:36,Abck,10,43.55
+.P
+10:03:37,Abck,11,44.55
+.P
+10:03:38,Abcd,12,101.00
+.P
+10:03:39,Abce,13,150.01
+.P
+10:03:40,Abce,12,152.02
+.P
+10:03:41,Abce,11,154.02
+.P
+10:03:42,Abce,15,157.02
+.P
+10:03:43,Abce,12,152.02
+.P
+10:03:44,Abce,12,152.02
+.P
+10:03:45,Abce,12,152.02
+.P
+10:03:46,Abce,13,152.02
+.P
+10:03:47,Abce,15,152.02
+.P
+10:03:48,Abce,11,152.02
+.P
+10:03:49,Abce,22,152.02
+.P
+10:03:50,Abce,13,152.02
+.P
+10:03:51,Abce,18,152.02
+.P
+10:03:52,Abce,19,152.02
+.P
+10:03:53,Abce,20,152.02
+.P
+10:03:54,Abce,22,152.02
+.P
+10:03:55,Abce,14,152.02
+.P
+10:03:56,Abce,12,152.02
+.P
+10:03:57,Abce,11,152.02
+.P
+10:03:58,Abce,11,152.02
+.P
+10:03:59,Abce,13,152.02
+.P
+10:03:60,Abce,14,152.02
+.P
+.P
+Here are some examples how to use it:
+.P
+qcsv --select "1,2,3" --smooth 2 --filter "%text = 'Abce' and #3 >= 10"
+.P
+
+.SH OPTIONS
+
+The command supports the following command line parameters:
+
+.SS Analysis-related parameters:
+
+.tp
+.BR \-a ", " \-\-has_header
+tells qcsv that the input file has a header line. The first non-empty non-comment line will be 
+treated as header. This parameter is set by default. To unset it use: -a0 or --header 0
+
+.BR \-l ", " \-\-trim_lines
+tells qcsv to remove white spaces at the beginning and end of each line before processing. This 
+parameter is not set by default.
+
+.BR \-t ", " \-\-trim_columns
+tells qcsv to remove white spaces at the beginning and end of each column before processing. This 
+parameter is not set by default.
+
+.BR \-q ", " \-\-trim_quotes
+tells qcsv to remove quotes at the beginning and end of each column before processing. It will only 
+remove quotes if they are at the beginning and end of the column. Quotes in the middle stay 
+untouched. If combined with trim_columns trim_columns will be executed first and then trim_quotes. 
+This parameter is not set by default.
+
+.BR \-e ", " \-\-ignore_empty_columns
+tells qcsv to ignore empty columns, i.e. they are treated as if they are not there.
+
+.BR \-c \fIchar\fR ", " \-\-column_separator \fIchar\fR
+tells qcsv to use \fIchar\fR as column separator character. At the moment qcsv only supports a 
+single separator character.  If this parameter is omitted qcsv will try out several typical 
+separators (whitespace, comma [','], semicolon [';'], colon [':'] and pick the best fitting.
+
+.BR \-b\fInum_lines\fR ", " \-\-buffer_size \fInum_lines\fR
+tells qcsv to buffer num_lines lines from the input before processing them. A larger number tends 
+to create faster processing. The default buffer size is 5000 lines.
+
+.SS Selection-related parameters:
+
+.BR \-s\fI"<list_of_columns>"\fR ", " \-\-select \fI"<list_of_columns>"\fR
+
+tells qcsv which of the columns of the CSV file shall be processed. Columns can be specified either 
+by column number or by column name provided that the CVS file provides a title row. Default value 
+is "empty" which means to process all columns. The command line option is similar to the column 
+selection in of a SQL select statement such as "SELECT <column_list> FROM table;" 
+.P
+Here is an example that selects the column numbers 0, 3, and the columns with the titles month and 
+budget, as well as column number 7: 
+.P
+-s"0, 3, month, budget, 7". 
+
+.BR \-r\fI"(column:base, )+"\fR ", " \-\-rebase \fI"(column:base,)+"\fR
+tells qcsv to rebase columns to start value. \fIcolumn\fR represents a column either by column 
+number or by column title. \fIbase\fR is the start value to be chosen for the first row in the CSV 
+file. For the next row the column value equals to the base plus the delta between the original value
+of the first row and this row, i.e.: 
+.P
+rebased_row[i][column] = base + original_row[i] - original_row[0][column]
+.P
+qcsv can rebase columns of type int, float, and datetime.  If the user tries rebasing a column of
+type string it throws an error. Here is an example that rebases the time column from the 
+performancetest.log file:
+.P
+qcsv -r"date:'2015-30-01'" -- events.log
+.P
+The next example rebases the second column (title "linecounter") in the above mentioned 
+datalines.csv.
+.P
+qcsv -r"2:1" -- datalines.csv
+.P
+
+.SS Statistics-related configuration options:
+
+.BR \-i\fI"{all, none, [list of values]+"\fR ", " \-\-statistics \fI"{all, none, [list of values]"\fR
+with list of values = 
+\fI [counter, total, mean, m2, median, variance, maximum, minimum, maximum_index, 
+     minimum_index, variance_step_size, mean_step_size, m2_step_size, maximum_step_size, 
+     minimum_step_size, maximum_index_step_size, minimum_index_step_size, 
+     smallest_timestamp, biggest_timestamp, smallest_timestamp_idx, biggest_timestamp_idx, 
+     first_timestamp_set, first_timestamp, last_timestamp, max_string_length, 
+     min_string_length, max_string_length_idx, min_string_length_idx,]\fR
+
+tells qcsv to output either all, none, or a selected subset of statistics. Default is \fIall\fR.
+An example line looks like this:
+.P
+-i"total, mean, variance, maximum, minimum"
+.P
+
+.SS Filter-related configuration options:
+
+.BR \-f\fI"<filter_expression>"\fR ", " \-\-filter \fI"<filter_expression>"\fR
+ 
+tells qcsv to use only rows from the input file that fulfil certain condition. It can be compared 
+to the WHERE clause in a SQL select statement. The condition is specified in a filter expression. 
+An example filter expression looks like this: 
+.P
+-f"(#2 + 5 > 17 and %month == 'May') or (%budget >= %planned_budget * 1.1)" 
+.P
+According to this example any row will be selected in which the 2nd column plus the floating point 
+value 5 is larger than the floating point value 17 and the column titled "month" has the value 
+"May" or the column titled "budget" is larger or equal to the column titled "planned_budget" 
+multiplied by the floating point value 1.1. Note that the braces are optional in this expression 
+because the "and" operator has a stronger binding than the "or" operator.
+.P
+qcsv recognizes the type of each column. It supports integer, floating point, date, and string.  
+Expressions can make use of any of these types. For example it is possible to handle dates like 
+this: "%closing_date < '2015-06-20 14:25:00'". It is also possible to do calculations such as 
+"%closing_date - %opening_date > 17000" which means to calculate the delta time between the column 
+named "closing_date" and the column named "opening_date" and compare it to 17000 seconds.
+
+.SS Smoothing-related filter options
+
+.BR \-m\fI<num_lines>\fR ", " \-\-smooth \fI<num_lines>\fR
+tells qcsv to smooth each column over <num_lines> number of lines. qcsv can smooth the following 
+data types: int and float columns are smoothed by using the average over the smoothing interval. 
+For columns of type datetime qcsv calculates the middle value over the smoothing interval. For 
+columns of type string qcsv chooses the first string of the interval. By default the parameter is 
+not set which means no smoothing takes place. If <num_lines> is smaller than 2 qcsv will also not 
+executed smoothing.
+
+.SS Output-related configuration options
+
+.BR \-S\fI{0,1}\fR ", " \-\-supress_output \fI{0,1}\fR
+tells qcsv to suppress (1) the output of the parsed lines. 
+
+.BR \-E\fI{0,1,2}\fR ", " \-\-output_empty_lines \fI{0,1,2}\fR
+tells qcsv to output either no empty lines (0), one empty line for each group of one or more empty 
+lines (1) in a row, or all empty lines (2). Default value is 2; i.e. by default qcsv will output 
+all empty lines.
+
+.BR \-C ", " \-\-output_comment_lines
+tells qcsv to output comment lines. A comment line is any line that begins with the comment 
+character. Default comment character is the hash sign ["#"]. It can be changed with the command 
+line option -X. The option is not set by default, i.e. comment lines are not printed into the 
+output file.
+
+.BR \-H ", " \-\-output_header_line
+tells qcsv to output header lines. This parameter is set by default. 
+To unset it use: -H0 or --output_header_line 0
+
+.BR \-A ", " \-\-align_columns
+
+tells qcsv to output the columns so that they line up neatly row by row. Columns that are too short 
+will be filled with fill characters. The widest entry of each column of all rows in the first 
+buffer define the width for each column. If in later buffers the columns get wider the column width 
+gets updated accordingly (there is obviously room for improvement in the software). When this 
+parameter is set to true integer and float columns are right aligned, all others are left, aligned.
+This parameter is not set by default.
+ 
+.BR \-E\fIchar\fR ", " \-\-header_column_fill_char \fIchar\fR
+tells qcsv which character to use for filling the columns in the header for alignment. Default is  
+blank (' ').
+
+.BR \-N\fIchar\fR ", " \-\-number_column_filler_char \fIchar\fR
+tells the qcsv which character to use to fill columns of a number type (int or float). Default is 
+blank (' ').
+
+.BR \-S\fIchar\fR ", " \-\-string_column_filler_char \fIchar\fR
+tells the qcsv which character to use to fill columns of string type or date type. Default is blank
+(' ').
+
+.BR \-F \fIprecission\fR ", " \-\-flt_precision \fIprecission\fR
+tells qcsv how precise to output floating point numbers. Default is 8 digits.
+
+.BR \-I \fIlength\fR ", " \-\-int_length \fIlength\fR
+tells qcsv how many digits to reserve for integers. Rest is filled up with leading 0.
+
+.BR \-D \-\-output_datetime_format
+tells qcsv how to format datetime columns. Understands the standard formatting options of the 
+operating system.
+
+.BR \-P\fIchar\fR ", " \-\-output_separator \fIchar\fR
+tells qcsv which column separator to use in the file output. Default is comma (',').
+
+.BR \-O\fI"<sort_option> range [#start:#stop]"\fR ", " \-\-order-columns \fI"<sort-option> range [#start:#stop]"\fR
+tells qcsv how to order the column in the output. The first part is the sort option and the second 
+part is the range of columns to be sorted. The range is optional. All other columns are placed 
+before the sorted columns.
+.P
+Options are:
+.P
+None: Same as if the option is omitted.
+.P
+ - by_title: Columns are sorted alphabetically by their title.
+ - by_title_descending: Columns are sorted alphabetically by their title in reverse order.
+.P
+The following options require to have statistics collected. They only work with numerical columns.
+All columns of non-numerical type will come first.
+.P
+ - by_max: Columns are sorted according to the column with the maximum value.
+ - by_max_descending: Columns are sorted according to the column with the maximum value in reverse
+   order.
+ - by_min_value: Columns are sorted according to the column with the maximum value.
+ - by_min_value_descending: Columns are sorted according to the column with the maximum value in 
+   reverse order.
+ - by_avg: Columns are sorted according to the column with the maximum value.
+ - by_avg_descending: Columns are sorted according to the column with the maximum value in reverse
+   order.
+.P
+The range is provided as a range. The range can consist of a list of columns or as a range of 
+columns, or a combination of both. In the following a few examples:
+.P
+In the following example all columns are sorted by title:
+.P
+-O"by_title"
+.P
+In the next example columns are sorted by their mean value, but only the columns 2, 6-9, 11-13, 4, and 
+column with the title "whatever column".
+-O"by_avg [2, 6:9, 11:13, 4, 'whatever column']"
+.P
+In the next example the columns are sorted by their maximum value, starting with the column named
+"whatever column" all the way to the end.
+.P
+-O"by_max ['whatever column':]"
+.P
+In the next example the columns are sorted by their minimum value, starting with the very first 
+column to the 7th column including the 7th.
+.P
+-O"by_min_descending [:7]"
+.P
+Note that the current version of qcsv supports only a single sort criterion. Giving multiple sort 
+criteria might come at some later point in time.
+ 
+.BR \-h ", " \-\-help
+prints a help message of how to use this tool.
+
+.SH SEE ALSO
+qsum(8), qavg(5), qstats(8), qsmooth(8)
+
+.SH BUGS
+Too many to mention. This is still pretty freshly written software without much testing.
+
+.SH AUTHOR
+Christoph Kuhmuench (christoph.kuhmuench@gmail.com)

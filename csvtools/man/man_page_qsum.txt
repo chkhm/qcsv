@@ -1,0 +1,248 @@
+.\" Manpage for qsum.
+.\" Contact christoph.kuhmuench@gmail.com to correct errors or typos.
+.TH man 8 "20 June 2015" "0.55" "qsum man page"
+.SH NAME
+qsum \- sum up columns of CSV files and streams
+.SH SYNOPSIS
+qsum [options] -- [inputfilename] [outputfilename]
+
+.SH DESCRIPTION
+
+qsum is a tool for summing up the columns of comma separated values (CSV) files or streams. It is 
+able to detect columns, column types and the separator between the columns of the CSV file. For 
+each column that is of type int, floating point, or datetime it calculates a sum. For columns of 
+type string it ommmits calculating a sum.
+.P
+It also provides features to manipulate the values before calculating the sum, e.g. stripping 
+whitespaces, stripping quotes, etc. Similar to the SQL select command individual columns can be 
+chosen (select a, b, c) and a where clause can be applied that filters out individual rows. In 
+addition qsum can smooth the incoming data. Smoothing means that the data is averaged over multiple 
+rows. qsum can smooth integer, floating point and datetime data. For strings one string out of the 
+group of rows is chosen.
+.P
+qsum operates stream-oriented and can work with input files of arbitrary length. The user can 
+manipulate how much data shall be kept in RAM. When no input and/ or output file is specified it 
+reads from standard input and writes to standard output.
+.P
+Assume that the input file test.csv has the following content:
+.P
+time,text,value1,value2
+.P
+10:02:29,Abcd,10,100.00
+.P
+10:02:30,Abce,11,101.01
+.P
+10:02:31,Abcf,9,99.99
+.P
+10:02:33,Abch,12,120.11
+.P
+10:03:34,Abci,8,79.89
+.P
+10:03:35,Abcj,9,200.513
+.P
+10:03:36,Abck,10,43.55
+.P
+10:03:37,Abck,11,44.55
+.P
+10:03:38,Abcd,12,101.00
+.P
+10:03:39,Abce,13,150.01
+.P
+10:03:40,Abce,12,152.02
+.P
+10:03:41,Abce,11,154.02
+.P
+10:03:42,Abce,15,157.02
+.P
+10:03:43,Abce,12,152.02
+.P
+10:03:44,Abce,12,152.02
+.P
+10:03:45,Abce,12,152.02
+.P
+10:03:46,Abce,13,152.02
+.P
+10:03:47,Abce,15,152.02
+.P
+10:03:48,Abce,11,152.02
+.P
+10:03:49,Abce,22,152.02
+.P
+10:03:50,Abce,13,152.02
+.P
+10:03:51,Abce,18,152.02
+.P
+10:03:52,Abce,19,152.02
+.P
+10:03:53,Abce,20,152.02
+.P
+10:03:54,Abce,22,152.02
+.P
+10:03:55,Abce,14,152.02
+.P
+10:03:56,Abce,12,152.02
+.P
+10:03:57,Abce,11,152.02
+.P
+10:03:58,Abce,11,152.02
+.P
+10:03:59,Abce,13,152.02
+.P
+10:03:60,Abce,14,152.02
+.P
+.P
+Here are some examples how to use it:
+.P
+qsum --select "1,2,3" --filter "%text = 'Abce' and #3 >= 10"
+.P
+
+.SH OPTIONS
+
+The command supports the following command line parameters:
+
+.SS Analysis-related parameters:
+
+.tp
+.BR \-a ", " \-\-has_header
+tells qsum that the input file has a header line. The first non-empty non-comment line will be 
+treated as header. This parameter is set by default. To unset it use: -a0 or --header 0
+
+.BR \-l ", " \-\-trim_lines
+tells qsum to remove white spaces at the beginning and end of each line before processing. This 
+parameter is not set by default.
+
+.BR \-t ", " \-\-trim_columns
+tells qsum to remove white spaces at the beginning and end of each column before processing. This 
+parameter is not set by default.
+
+.BR \-q ", " \-\-trim_quotes
+tells qsum to remove quotes at the beginning and end of each column before processing. It will only 
+remove quotes if they are at the beginning and end of the column. Quotes in the middle stay 
+untouched. If combined with trim_columns trim_columns will be executed first and then trim_quotes. 
+This parameter is not set by default.
+
+.BR \-e ", " \-\-ignore_empty_columns
+tells qsum to ignore empty columns, i.e. they are treated as if they are not there.
+
+.BR \-c \fIchar\fR ", " \-\-column_separator \fIchar\fR
+tells qsum to use \fIchar\fR as column separator character. At the moment qsum only supports a 
+single separator character.  If this parameter is omitted qsum will try out several typical 
+separators (whitespace, comma [','], semicolon [';'], colon [':'] and pick the best fitting.
+
+.BR \-b\fInum_lines\fR ", " \-\-buffer_size \fInum_lines\fR
+tells qsum to buffer num_lines lines from the input before processing them. A larger number tends 
+to create faster processing. The default buffer size is 5000 lines.
+
+.SS Selection-related parameters:
+
+.BR \-s\fI"<list_of_columns>"\fR ", " \-\-select \fI"<list_of_columns>"\fR
+
+tells qsum which of the columns of the CSV file shall be processed. Columns can be specified either 
+by column number or by column name provided that the CVS file provides a title row. Default value 
+is "empty" which means to process all columns. The command line option is similar to the column 
+selection in of a SQL select statement such as "SELECT <column_list> FROM table;" 
+.P
+Here is an example that selects the column numbers 0, 3, and the columns with the titles month and 
+budget, as well as column number 7: 
+.P
+-s"0, 3, month, budget, 7". 
+
+.BR \-r\fI"(column:base, )+"\fR ", " \-\-rebase \fI"(column:base,)+"\fR
+tells qcsv to rebase columns to start value. \fIcolumn\fR represents a column either by column 
+number or by column title. \fIbase\fR is the start value to be chosen for the first row in the CSV 
+file. For the next row the column value equals to the base plus the delta between the original value
+of the first row and this row, i.e.: 
+.P
+rebased_row[i][column] = base + original_row[i] - original_row[0][column]
+.P
+qcsv can rebase columns of type int, float, and datetime.  If the user tries rebasing a column of
+type string it throws an error. Here is an example that rebases the time column from the 
+performancetest.log file:
+.P
+qcsv -r"date:'2015-30-01'" -- events.log
+.P
+The next example rebases the second column (title "linecounter") in the above mentioned 
+datalines.csv.
+.P
+qcsv -r"2:1" -- datalines.csv
+.P
+
+.SS Filter-related configuration options:
+
+.BR \-f\fI"<filter_expression>"\fR ", " \-\-filter \fI"<filter_expression>"\fR
+ 
+tells qsum to use only rows from the input file that fulfil certain condition. It can be compared 
+to the WHERE clause in a SQL select statement. The condition is specified in a filter expression. 
+An example filter expression looks like this: 
+.P
+-f"(#2 + 5 > 17 and %month == 'May') or (%budget >= %planned_budget * 1.1)" 
+.P
+According to this example any row will be selected in which the 2nd column plus the floating point 
+value 5 is larger than the floating point value 17 and the column titled "month" has the value 
+"May" or the column titled "budget" is larger or equal to the column titled "planned_budget" 
+multiplied by the floating point value 1.1. Note that the braces are optional in this expression 
+because the "and" operator has a stronger binding than the "or" operator.
+.P
+qsum recognizes the type of each column. It supports integer, floating point, date, and string.  
+Expressions can make use of any of these types. For example it is possible to handle dates like 
+this: "%closing_date < '2015-06-20 14:25:00'". It is also possible to do calculations such as 
+"%closing_date - %opening_date > 17000" which means to calculate the delta time between the column 
+named "closing_date" and the column named "opening_date" and compare it to 17000 seconds.
+
+.SS Smoothing-related filter options
+
+.BR \-m\fI<num_lines>\fR ", " \-\-smooth \fI<num_lines>\fR
+tells qsum to smooth each column over <num_lines> number of lines. qsum can smooth the following 
+data types: int and float columns are smoothed by using the average over the smoothing interval. 
+For columns of type datetime qsum calculates the middle value over the smoothing interval. For 
+columns of type string qsum chooses the first string of the interval. By default the parameter is 
+not set which means no smoothing takes place. If <num_lines> is smaller than 2 qsum will also not 
+executed smoothing.
+
+.SS Output-related configuration options
+
+.BR \-A ", " \-\-align_columns
+
+tells qsum to output the columns so that they line up neatly row by row. Columns that are too short 
+will be filled with fill characters. The widest entry of each column of all rows in the first 
+buffer define the width for each column. If in later buffers the columns get wider the column width 
+gets updated accordingly (there is obviously room for improvement in the software). When this 
+parameter is set to true integer and float columns are right aligned, all others are left, aligned.
+This parameter is not set by default.
+ 
+.BR \-E\fIchar\fR ", " \-\-header_column_fill_char \fIchar\fR
+tells qsum which character to use for filling the columns in the header for alignment. Default is  
+blank (' ').
+
+.BR \-N\fIchar\fR ", " \-\-number_column_filler_char \fIchar\fR
+tells the qsum which character to use to fill columns of a number type (int or float). Default is 
+blank (' ').
+
+.BR \-S\fIchar\fR ", " \-\-string_column_filler_char \fIchar\fR
+tells the qsum which character to use to fill columns of string type or date type. Default is blank
+(' ').
+
+.BR \-F \fIprecission\fR ", " \-\-flt_precision \fIprecission\fR
+tells qsum how precise to output floating point numbers. Default is 8 digits.
+
+.BR \-I \fIlength\fR ", " \-\-int_length \fIlength\fR
+tells qsum how many digits to reserve for integers. Rest is filled up with leading 0.
+
+.BR \-D \-\-output_datetime_format
+tells qsum how to format datetime columns. Understands the standard formatting options of the 
+operating system.
+
+.BR \-P\fIchar\fR ", " \-\-output_separator \fIchar\fR
+tells qsum which column separator to use in the file output. Default is comma (',').
+
+.BR \-h ", " \-\-help
+prints a help message of how to use this tool.
+
+.SH SEE ALSO
+qcsv(8), qavg(8), qstats(8), qsmooth(8)
+
+.SH BUGS
+Too many to mention. This is still pretty freshly written software without much testing.
+
+.SH AUTHOR
+Christoph Kuhmuench (christoph.kuhmuench@gmail.com)

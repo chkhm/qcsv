@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>029FC149-4DB4-40C4-8C74-87BB35F01AD9</string>
+	<key>IDESourceControlProjectName</key>
+	<string>csvtools</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>9302D35F3F4257ABD61E5BAE20CD1E309C813CC7</key>
+		<string>192.168.1.103:/volume1/REPO/csvtools.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>csvtools.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>9302D35F3F4257ABD61E5BAE20CD1E309C813CC7</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>192.168.1.103:/volume1/REPO/csvtools.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>9302D35F3F4257ABD61E5BAE20CD1E309C813CC7</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>9302D35F3F4257ABD61E5BAE20CD1E309C813CC7</string>
+			<key>IDESourceControlWCCName</key>
+			<string>csvtools</string>
+		</dict>
+	</array>
+</dict>
+</plist>
