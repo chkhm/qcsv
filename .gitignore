@@ -26,3 +26,11 @@
 *.exe
 *.out
 *.app
+
+.DS_Store
+
+# excluded source files:
+strptime.c
+getopt*.*
+gettext.h
+
